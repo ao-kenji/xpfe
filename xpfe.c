@@ -15,7 +15,7 @@
  */
 
 /*
- * xpfe: Front-end interface for the program ruuning on XP (I/O processor)
+ * xpfe: OMRON LUNA's XP (HD647180X I/O processor) front-end
  */
 
 #include <err.h>
@@ -28,9 +28,6 @@
 #include <termios.h>
 
 #include <sys/stat.h>
-#include <sys/ioctl.h>
-
-#include <machine/xpio.h>
 
 #include "config.h"
 
@@ -109,7 +106,7 @@ main(int argc, char *argv[])
 
 		if (ret == 0)
 			continue;
-		if (c == 0x1c) {	/* 'Control-\' */
+		if (c == XPFE_QUIT) {	/* default: 'Control-\' */
 			running = 0;
 			continue;
 		}

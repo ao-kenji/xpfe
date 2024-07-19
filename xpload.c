@@ -27,8 +27,9 @@
 
 #include <machine/xpio.h>
 
+#include "config.h"
+
 #define XP_MAX_SIZE	65536
-#define XP_DEV		"/dev/xp"
 
 static void *
 loadfile(const char *fname, int maxsize, int *sizep)

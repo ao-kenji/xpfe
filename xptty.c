@@ -17,32 +17,30 @@
 #include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>	/* strncmp() */
 #include <termios.h>
 #include <unistd.h>
 
 #include "config.h"
-
-#define	RX_OFFSET	4
-#define	TX_OFFSET	8
-
-volatile uint32_t *xprbuf;	/* offset 0x7f04: from xptty */
-volatile uint32_t *xptbuf;	/* offset 0x7f08: to xptty */
+#include "xpfe.h"
 
 /* external */
 extern void *xpshm;		/* in xpfe.c */
 
 /* internal use */
 static struct termios termios_saved;
+struct xpfe_if_t *xpfe_if;
 
 void
 xptty_init(void)
 {
-	if (xpshm == NULL) {
+	if (xpshm == NULL)
 		err(EXIT_FAILURE, "xpshm not initialized");
-	}
 
-	xprbuf = (u_int32_t *)(xpshm + XP_TTY_OFFSET + RX_OFFSET);
-	xptbuf = (u_int32_t *)(xpshm + XP_TTY_OFFSET + TX_OFFSET);
+	xpfe_if = xpshm + XPFE_OFFSET;
+
+	if (strncmp(xpfe_if->magic, "XPFE", 4) != 0)
+		err(EXIT_FAILURE, "invalid I/F offset 0x%04x", XPFE_OFFSET);
 }
 
 void
@@ -80,6 +78,7 @@ xptty_receive(void)
 {
 	char c;
 	u_int code;
+	volatile uint32_t *xprbuf = &(xpfe_if->rbuf);
 
 	/* Receive */
 	if (*xprbuf & 0x00ff0000) {
@@ -93,6 +92,8 @@ xptty_receive(void)
 void
 xptty_send(char c)
 {
+	volatile uint32_t *xptbuf = &(xpfe_if->tbuf);
+
 	/* Transmit */
 	if ((*xptbuf & 0x00ff0000) == 0) {
 		*xptbuf =((c & 0xff) << 24) | 0x00ff0000;

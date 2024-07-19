@@ -18,6 +18,8 @@
 #define	__XPFE_CONFIG_H__
 
 #define	XP_DEV		"/dev/xp"
-#define	XP_TTY_OFFSET	0x7f00
+#define	XPFE_OFFSET	0x7f00
+
+#define	XPFE_QUIT	0x1c	/* 'Control-\' */
 
 #endif
