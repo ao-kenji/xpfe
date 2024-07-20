@@ -15,11 +15,10 @@
  */
 
 #include <err.h>
-#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h>		/* memset() */
 #include <unistd.h>
 
 #include <sys/mman.h>
