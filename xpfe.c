@@ -75,9 +75,9 @@ main(int argc, char *argv[])
 	}
 
 	xpfd = open(XP_DEV, O_RDWR);
-	if (xpfd < 0 ) {
+	if (xpfd < 0 )
 		err(EXIT_FAILURE, "can not open %s", XP_DEV);
-	}
+
 	xpshm  = xp_mmap(xpfd);
 
 	if (a_flag)
@@ -105,6 +105,7 @@ main(int argc, char *argv[])
 			running = 0;
 			continue;
 		}
+
 		/* Send */
 		xptty_send(c);
 	}
@@ -116,7 +117,7 @@ main(int argc, char *argv[])
 	return EXIT_SUCCESS;
 }
 
-void
+__dead void
 usage(void)
 {
 	printf("Usage: %s [options] firmware_file\n", getprogname());

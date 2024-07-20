@@ -40,7 +40,7 @@ xptty_init(void)
 	xpfe_if = xpshm + XPFE_OFFSET;
 
 	if (strncmp(xpfe_if->magic, "XPFE", 4) != 0)
-		err(EXIT_FAILURE, "invalid I/F offset 0x%04x", XPFE_OFFSET);
+		errx(EXIT_FAILURE, "invalid I/F offset 0x%04x", XPFE_OFFSET);
 }
 
 void
@@ -48,9 +48,8 @@ xptty_set_rawmode(void)
 {
 	struct termios termios_new;
 
-	if (tcgetattr(STDIN_FILENO, &termios_saved) == -1) {
+	if (tcgetattr(STDIN_FILENO, &termios_saved) == -1)
 		err(EXIT_FAILURE, "tcgetattr");
-	}
 
 	termios_new = termios_saved;
 	termios_new.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
@@ -60,17 +59,15 @@ xptty_set_rawmode(void)
 	termios_new.c_cc[VMIN] = 0;     /* per one character */
 	termios_new.c_cc[VTIME] = 0;    /* disable timer */
 
-	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &termios_new) == -1) {
+	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &termios_new) == -1)
 		err(EXIT_FAILURE, "tcsetattr");
-	}
 }
 
 void
 xptty_reset_mode(void)
 {
-	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &termios_saved) == -1) {
+	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &termios_saved) == -1)
 		err(EXIT_FAILURE, "tcsetattr");
-	}
 }
 
 void
@@ -95,7 +92,6 @@ xptty_send(char c)
 	volatile uint32_t *xptbuf = &(xpfe_if->tbuf);
 
 	/* Transmit */
-	if ((*xptbuf & 0x00ff0000) == 0) {
+	if ((*xptbuf & 0x00ff0000) == 0)
 		*xptbuf =((c & 0xff) << 24) | 0x00ff0000;
-	}
 }

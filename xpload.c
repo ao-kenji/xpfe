@@ -38,27 +38,25 @@ loadfile(const char *fname, int maxsize, int *sizep)
 	struct stat sb;
 
 	fd = open(fname, O_RDONLY);
-	if (fd < 0) {
+	if (fd < 0)
 		err(EXIT_FAILURE, "can not open %s", fname);
-	}
-	if (fstat(fd, &sb) != 0) {
+	if (fstat(fd, &sb) != 0)
 		err(EXIT_FAILURE, "can not stat %s", fname);
-	}
+
 	size = sb.st_size;
-	if (size == 0 || size > maxsize) {
-		err(EXIT_FAILURE, "invalid size of %s (%d)",
-		    fname, size);
-	}
+	if (size == 0 || size > maxsize)
+		err(EXIT_FAILURE, "invalid size of %s (%d)", fname, size);
+
 	buf = malloc(size);
-	if (buf == NULL) {
+	if (buf == NULL)
 		err(EXIT_FAILURE, "can not malloc buffer");
-	}
+
 	memset(buf, 0, size);
 
 	count = read(fd, buf, size);
-	if (count != size) {
+	if (count != size)
 		err(EXIT_FAILURE, "failed to read %s", fname);
-	}
+
 	close(fd);
 
 	if (sizep != NULL)
@@ -70,7 +68,7 @@ void
 xp_load_reset(int xpfd, const char *fname)
 {
 	uint8_t *buf;
-	int retval, size;
+	int ret, size;
 	struct xp_download xpdl;
 
 	buf = loadfile(fname, XP_MAX_SIZE, &size);
@@ -78,10 +76,9 @@ xp_load_reset(int xpfd, const char *fname)
 	xpdl.size = size;
 	xpdl.data = buf;
 
-	retval = ioctl(xpfd, XPIOCDOWNLD, &xpdl);
-	if (retval != 0) {
+	ret = ioctl(xpfd, XPIOCDOWNLD, &xpdl);
+	if (ret != 0)
 		err(EXIT_FAILURE, "ioctl failed");
-	}
 
 	free(buf);
 }
@@ -93,9 +90,8 @@ xp_mmap(int xpfd)
 
 	xpshm = mmap(NULL, XP_MAX_SIZE, PROT_WRITE|PROT_READ, MAP_SHARED,
 	    xpfd, 0);
-	if (xpshm == MAP_FAILED) {
+	if (xpshm == MAP_FAILED)
 		err(EXIT_FAILURE, "mmap failed");
-	}
 
 	return xpshm;
 }
