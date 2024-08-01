@@ -39,9 +39,9 @@ loadfile(const char *fname, int maxsize, int *sizep)
 
 	fd = open(fname, O_RDONLY);
 	if (fd < 0)
-		err(EXIT_FAILURE, "can not open %s", fname);
+		err(EXIT_FAILURE, "can not open XP program %s", fname);
 	if (fstat(fd, &sb) != 0)
-		err(EXIT_FAILURE, "can not stat %s", fname);
+		err(EXIT_FAILURE, "can not stat XP program %s", fname);
 
 	size = sb.st_size;
 	if (size == 0 || size > maxsize)
