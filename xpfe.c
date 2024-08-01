@@ -106,6 +106,10 @@ main(int argc, char *argv[])
 		/* Receive & put to stdout, first */
 		xptty_receive();
 
+		/* Disk I/O */
+		if (d_flag)
+			xpdisk_io();
+
 		/* Check Key in */
 		ret = read(STDIN_FILENO, &c, 1);
 
@@ -115,9 +119,6 @@ main(int argc, char *argv[])
 			running = 0;
 			continue;
 		}
-
-		if (d_flag)	 /* Disk I/O */
-			xpdisk_io();
 
 		/* Send */
 		xptty_send(c);
