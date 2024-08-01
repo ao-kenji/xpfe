@@ -40,7 +40,11 @@ xptty_init(void)
 	xpfe_if = xpshm + XPFE_OFFSET;
 
 	if (strncmp(xpfe_if->magic, "XPFE", 4) != 0)
-		errx(EXIT_FAILURE, "invalid I/F offset 0x%04x", XPFE_OFFSET);
+		errx(EXIT_FAILURE, "invalid I/F offset 0x%04x,"
+		    " magic %02x %02x %02x %02x",
+		    XPFE_OFFSET,
+		    (xpfe_if->magic)[0], (xpfe_if->magic)[1],
+		    (xpfe_if->magic)[2], (xpfe_if->magic)[3]);
 }
 
 void
