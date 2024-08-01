@@ -18,8 +18,12 @@
 #define	__XPFE_H__
 
 struct xpfe_if_t {
-	char magic[4];			/* "XPFE" */
-	volatile uint32_t rbuf;		/* tty-out from XP */
-	volatile uint32_t tbuf;		/* tty-in to XP */
+	char magic[4];			/*  0: "XPFE" */
+	volatile uint32_t rbuf;		/*  4: tty-out from XP */
+	volatile uint32_t tbuf;		/*  8: tty-in to XP */
+	char padd[4];			/* 12: padding */
+	volatile uint32_t d_command;	/* 16: disk command from XP */
+	volatile uint32_t d_flag;	/* 20: disk flag */
+	volatile uint8_t  d_buf[512];	/* 24: disk buffer */
 } __packed;
 #endif
