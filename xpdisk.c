@@ -30,7 +30,7 @@
 #include "xpfe.h"
 
 #define XPFE_BLKSIZE 512
-#define	XPFE_DISKMAX_BLK (16 * 256 * 256) /* XXX: 512MB at this moment */
+#define	XPFE_DISKMAX_BLK (256 * 256) /* XXX: 32MB at this moment */
 
 /* extern */
 extern struct xpfe_if_t *xpfe_if;
