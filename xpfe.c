@@ -28,7 +28,7 @@
 
 /* global variables */
 int a_flag = 0;
-int d_flag = 0;
+int has_disk = 0;
 int xpfd;
 volatile uint8_t *xpshm;
 
@@ -61,27 +61,26 @@ main(int argc, char *argv[])
 
 	setprogname(argv[0]);
 
-	while ((ch = getopt(argc, argv, "ad:")) != -1) {
+	while ((ch = getopt(argc, argv, "a")) != -1) {
 		switch (ch) {
 		case 'a':
 			a_flag = 1;
-			break;
-		case 'd':
-			d_flag = 1;
-			xpdisk_open(optarg);
 			break;
 		default:
 			usage();
 		}
 	}
 
-	xpfname = argv[optind];
-
 	argc -= optind;
 	argv += optind;
 
-	if (!a_flag && (argc != 1)) {
+	if ((argc == 0) || (argc > 2))
 		usage();
+
+	xpfname = argv[0];
+	if (argc == 2) {
+		xpdisk_open(argv[1]);
+		has_disk = 1;
 	}
 
 	xpfd = open(XP_DEV, O_RDWR);
@@ -107,7 +106,7 @@ main(int argc, char *argv[])
 		xptty_receive();
 
 		/* Disk I/O */
-		if (d_flag)
+		if (has_disk)
 			xpdisk_io();
 
 		/* Check Key in */
@@ -134,8 +133,8 @@ main(int argc, char *argv[])
 __dead void
 usage(void)
 {
-	printf("Usage: %s [options] firmware_file\n", getprogname());
+	printf("Usage: %s [options] xp_prog_file [disk_image]\n",
+	    getprogname());
 	printf("\t-a		: attach to running XP\n");
-	printf("\t-d diskimage	: disk image file\n");
 	exit(EXIT_FAILURE);
 }
