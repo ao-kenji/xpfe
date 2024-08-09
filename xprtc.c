@@ -28,12 +28,18 @@ extern struct xpfe_if_t *xpfe_if;
 void
 xprtc_sync(void)
 {
-	volatile time_t *xprtc = &((*xpfe_if).rtc);
+	volatile uint8_t *xprtc = &((*xpfe_if).rtc);
 	time_t t;
-#if 0
-	time((time_t *)&xprtc);
-#else
+	struct tm *now;
+
 	time(&t);
-	memcpy((void *)xprtc, &t, 8);
-#endif
+	now = localtime(&t);
+
+	*xprtc++ = (uint8_t)((now->tm_year + 1900) % 256);
+	*xprtc++ = (uint8_t)((now->tm_year + 1900) / 256);
+	*xprtc++ = (uint8_t) (now->tm_mon + 1);
+	*xprtc++ = (uint8_t) (now->tm_mday);
+	*xprtc++ = (uint8_t) (now->tm_hour);
+	*xprtc++ = (uint8_t) (now->tm_min);
+	*xprtc++ = (uint8_t) (now->tm_sec);
 }
