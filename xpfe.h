@@ -21,7 +21,7 @@ struct xpfe_if_t {
 	char magic[4];			/*  0: "XPFE" */
 	volatile uint32_t rbuf;		/*  4: tty-out from XP */
 	volatile uint32_t tbuf;		/*  8: tty-in to XP */
-	volatile time_t	  rtc;		/* 12: RTC value in unix time_t */
+	volatile uint8_t  rtc[8];	/* 12: RTC value in YYYYMMDDHHMMSS */
 	volatile uint32_t d_command;	/* 20: disk command from XP */
 	volatile uint32_t d_flag;	/* 24: disk flag */
 	volatile uint8_t  d_buf[512];	/* 28: disk buffer */
