@@ -44,6 +44,9 @@ void xpdisk_close(void);
 void xp_load_reset(int, const char *);
 void *xp_mmap(int);
 
+/* xprtc.c */
+void xprtc_sync(void);
+
 /* xptty.c */
 void xptty_init(void);
 void xptty_set_rawmode(void);
@@ -102,6 +105,9 @@ main(int argc, char *argv[])
 	running = 1;
 
 	while (running) {
+		/* Sync RTC */
+		xprtc_sync();
+
 		/* Receive & put to stdout, first */
 		xptty_receive();
 

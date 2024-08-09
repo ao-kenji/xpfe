@@ -14,16 +14,26 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef	__XPFE_H__
-#define	__XPFE_H__
+#include <err.h>
+#include <stdio.h>	/* printf() */
+#include <stdlib.h>
+#include <string.h>	/* memcpy() */
+#include <time.h>
 
-struct xpfe_if_t {
-	char magic[4];			/*  0: "XPFE" */
-	volatile uint32_t rbuf;		/*  4: tty-out from XP */
-	volatile uint32_t tbuf;		/*  8: tty-in to XP */
-	volatile time_t	  rtc;		/* 12: RTC value in unix time_t */
-	volatile uint32_t d_command;	/* 20: disk command from XP */
-	volatile uint32_t d_flag;	/* 24: disk flag */
-	volatile uint8_t  d_buf[512];	/* 28: disk buffer */
-} __packed;
+#include "xpfe.h"
+
+/* extern */
+extern struct xpfe_if_t *xpfe_if;
+
+void
+xprtc_sync(void)
+{
+	volatile time_t *xprtc = &((*xpfe_if).rtc);
+	time_t t;
+#if 0
+	time((time_t *)&xprtc);
+#else
+	time(&t);
+	memcpy((void *)xprtc, &t, 8);
 #endif
+}
