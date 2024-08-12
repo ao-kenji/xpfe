@@ -19,8 +19,8 @@
 
 struct xpfe_if_t {
 	char magic[4];			/*  0: "XPFE" */
-	volatile uint32_t rbuf;		/*  4: tty-out from XP */
-	volatile uint32_t tbuf;		/*  8: tty-in to XP */
+	volatile uint32_t t_rxbuf;	/*  4: tty-out from XP */
+	volatile uint32_t t_txbuf;	/*  8: tty-in to XP */
 	volatile uint8_t  rtc[8];	/* 12: RTC value in YYYYMMDDHHMMSS */
 	volatile uint32_t d_command;	/* 20: disk command from XP */
 	volatile uint32_t d_flag;	/* 24: disk flag */

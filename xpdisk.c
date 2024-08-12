@@ -71,7 +71,7 @@ void
 xpdisk_transfer(struct xpfe_if_t *xpfe_if)
 {
 	volatile uint32_t *xpdcom = &(xpfe_if->d_command);
-	volatile uint8_t  *xpdbuf = (*xpfe_if).d_buf;
+	volatile uint8_t  *xpdbuf = xpfe_if->d_buf;
 	uint8_t buf[XPFE_BLKSIZE];
 	int dir, index;
 	off_t ret;

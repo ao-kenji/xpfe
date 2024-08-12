@@ -79,12 +79,12 @@ xptty_receive(void)
 {
 	char c;
 	u_int code;
-	volatile uint32_t *xprbuf = &(xpfe_if->rbuf);
+	volatile uint32_t *rxbuf = &(xpfe_if->t_rxbuf);
 
 	/* Receive */
-	if (*xprbuf & 0x00ff0000) {
-		code = (u_int)((*xprbuf & 0xff000000) >> 24);
-		*xprbuf &= 0x0000ffff;  /* clear data & flag */
+	if (*rxbuf & 0x00ff0000) {
+		code = (u_int)((*rxbuf & 0xff000000) >> 24);
+		*rxbuf &= 0x0000ffff;  /* clear data & flag */
 		c = (char)code;
 		write(STDOUT_FILENO, &c, 1);
 	}
@@ -93,9 +93,9 @@ xptty_receive(void)
 void
 xptty_send(char c)
 {
-	volatile uint32_t *xptbuf = &(xpfe_if->tbuf);
+	volatile uint32_t *txbuf = &(xpfe_if->t_txbuf);
 
 	/* Transmit */
-	if ((*xptbuf & 0x00ff0000) == 0)
-		*xptbuf =((c & 0xff) << 24) | 0x00ff0000;
+	if ((*txbuf & 0x00ff0000) == 0)
+		*txbuf =((c & 0xff) << 24) | 0x00ff0000;
 }

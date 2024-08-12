@@ -28,7 +28,7 @@ extern struct xpfe_if_t *xpfe_if;
 void
 xprtc_sync(void)
 {
-	volatile uint8_t *xprtc = &((*xpfe_if).rtc);
+	volatile uint8_t *xprtc = xpfe_if->rtc;
 	time_t t;
 	struct tm *now;
 
