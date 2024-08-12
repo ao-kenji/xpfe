@@ -1,0 +1,8 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+
+# Local subfolders
+image/
