@@ -15,6 +15,7 @@
  */
 
 #include <err.h>
+#include <endian.h>		/* le16toh() */
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,7 @@
 
 /* extern */
 extern struct xpfe_if_t *xpfe_if;
+extern void *xpshm;
 
 /* static */
 int xpdisk_fd;
@@ -70,26 +72,27 @@ xpdisk_close(void)
 void
 xpdisk_transfer(struct xpfe_if_t *xpfe_if)
 {
-	volatile uint32_t *xpdcom = &(xpfe_if->d_command);
-	volatile uint8_t  *xpdbuf = xpfe_if->d_buf;
+	volatile uint32_t *xpd_lba = &(xpfe_if->xpd_lba);
+	volatile uint32_t *xpd_da  = &(xpfe_if->xpd_dir_addr);
 	uint8_t buf[XPFE_BLKSIZE];
-	int dir, index;
+	int dir, xpaddr;
 	off_t ret;
 
-	dir = (*xpdcom & 0xff000000) >> 24;
-	index = *xpdcom & 0x00ffffff;
+	dir = (*xpd_da & 0xff000000) >> 24;
+	/* XP stores its address in little endian */
+	xpaddr = (int)le16toh(*xpd_da & 0x0000ffff);
 
-	ret = lseek(xpdisk_fd, index * XPFE_BLKSIZE, SEEK_SET);
+	ret = lseek(xpdisk_fd, (off_t)(*xpd_lba) * XPFE_BLKSIZE, SEEK_SET);
 	if (ret == -1) {
 		warnx("%s: seek error, index = 0x08x", __func__, index);
 		return;
 	}
 
-	if (dir == 0) {
+	if (dir == 0) {	/* XP wants to read */
 		read(xpdisk_fd, buf, XPFE_BLKSIZE);
-		memcpy((void *)xpdbuf, buf, XPFE_BLKSIZE);
-	} else {
-		memcpy(buf, (void *)xpdbuf, XPFE_BLKSIZE);
+		memcpy((void *)(xpshm + xpaddr), buf, XPFE_BLKSIZE);
+	} else {	/* XP wants to write */
+		memcpy(buf, (void *)(xpshm + xpaddr), XPFE_BLKSIZE);
 		write(xpdisk_fd, buf, XPFE_BLKSIZE);
 	}
 }
@@ -97,12 +100,12 @@ xpdisk_transfer(struct xpfe_if_t *xpfe_if)
 void
 xpdisk_io(void)
 {
-	volatile uint32_t *xpdflag = &(xpfe_if->d_flag);
+	volatile uint32_t  *xpd_flag = &(xpfe_if->xpd_flag);
 
 	/* disk I/O */
-	if (*xpdflag & 0xff000000) {
+	if (*xpd_flag & 0xff000000) {
 		xpdisk_transfer(xpfe_if);
-		*xpdflag &= 0x00ffffff;
-		*xpdflag |= 0x00ff0000;
+		*xpd_flag &= 0x00ffffff;
+		*xpd_flag |= 0x00ff0000;
 	}
 }
