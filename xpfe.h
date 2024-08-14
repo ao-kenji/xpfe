@@ -17,13 +17,13 @@
 #ifndef	__XPFE_H__
 #define	__XPFE_H__
 
-struct xpfe_if_t {
-	char magic[4];			/*  0: "XPFE" */
-	volatile uint32_t t_rxbuf;	/*  4: tty-out from XP */
-	volatile uint32_t t_txbuf;	/*  8: tty-in to XP */
-	volatile uint8_t  rtc[8];	/* 12: RTC value in YYYYMMDDHHMMSS */
-	volatile uint32_t d_command;	/* 20: disk command from XP */
-	volatile uint32_t d_flag;	/* 24: disk flag */
-	volatile uint8_t  d_buf[512];	/* 28: disk buffer */
+struct xpfe_if_t {			/* T:tty, R:RTC, D:disk */
+	char magic[4];			/* magic "XPFE" */
+	volatile uint32_t t_rxbuf;	/* T: tty-out from XP */
+	volatile uint32_t t_txbuf;	/* T: tty-in to XP */
+	volatile uint8_t  rtc[8];	/* R: RTC value in YYYYMMDDHHMMSS */
+	volatile uint32_t xpd_lba;	/* D: disk LBA */
+	volatile uint32_t xpd_dir_addr;	/* D: transfer direction and XP addr */
+	volatile uint32_t xpd_flag;	/* D: flag */
 } __packed;
 #endif
