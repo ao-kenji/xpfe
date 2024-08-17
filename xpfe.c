@@ -39,6 +39,7 @@ void usage(void);
 void xpdisk_open(const char*);
 void xpdisk_io(void);
 void xpdisk_close(void);
+void xpdisk_register(void);
 
 /* xpload.c */
 void xp_load_reset(int, const char *);
@@ -81,14 +82,14 @@ main(int argc, char *argv[])
 		usage();
 
 	xpfname = argv[0];
+	xpfd = open(XP_DEV, O_RDWR);
+	if (xpfd < 0 )
+		err(EXIT_FAILURE, "can not open %s", XP_DEV);
+
 	if (argc == 2) {
 		xpdisk_open(argv[1]);
 		has_disk = 1;
 	}
-
-	xpfd = open(XP_DEV, O_RDWR);
-	if (xpfd < 0 )
-		err(EXIT_FAILURE, "can not open %s", XP_DEV);
 
 	xpshm  = xp_mmap(xpfd);
 
@@ -101,6 +102,7 @@ main(int argc, char *argv[])
 	printf("type '^\\' to detach.\n");
 
 	xptty_init();
+	xpdisk_register();
 	xptty_set_rawmode();
 	running = 1;
 

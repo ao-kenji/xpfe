@@ -48,8 +48,6 @@ xpdisk_open(const char *fname)
 	off_t size;
 	void *buf;
 	struct stat sb;
-	volatile uint32_t *xpd_flag = &(xpfe_if->xpd_flag);
-	uint32_t flag;
 
 	fd = open(fname, O_RDWR | 0666);
 	if (fd < 0)
@@ -63,9 +61,6 @@ xpdisk_open(const char *fname)
 
 	xpdisk_fd = fd;
 	xpdisk_size = sb.st_size;
-
-	flag = *xpd_flag;
-	*xpd_flag = flag | 0x00000001;
 }
 
 void
@@ -119,4 +114,14 @@ xpdisk_io(void)
 		*xpd_flag &= 0x00ffffff;
 		*xpd_flag |= 0x00ff0000;
 	}
+}
+
+void
+xpdisk_register(void)
+{
+	volatile uint32_t *xpd_flag = &(xpfe_if->xpd_flag);
+	uint32_t flag;
+
+	flag = *xpd_flag;
+	*xpd_flag = flag | 0x00000001;
 }
