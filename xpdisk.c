@@ -31,7 +31,7 @@
 #include "xpfe.h"
 
 #define XPFE_BLKSIZE 512
-#define	XPFE_DISKMAX_BLK (256 * 256) /* XXX: 32MB at this moment */
+#define	XPFE_DISKMAX_BLK (256 * 256 * 256) /* 8GB at this moment */
 
 /* extern */
 extern struct xpfe_if_t *xpfe_if;
@@ -56,10 +56,11 @@ xpdisk_open(const char *fname)
 		err(EXIT_FAILURE, "can not stat disk image %s", fname);
 
 	size = sb.st_size;
-	if (size == 0 || size > XPFE_DISKMAX_BLK * XPFE_BLKSIZE)
-		err(EXIT_FAILURE, "invalid size of %s (%d)", fname, size);
-
-	xpdisk_fd = fd;
+	if (size % XPFE_BLKSIZE != 0)
+		warnx("%s: size is not multiple of XPFE_BLKSIZE (%d)",
+		    fname, XPFE_BLKSIZE);
+	if (size == 0 || (size / XPFE_BLKSIZE > XPFE_DISKMAX_BLK))
+		err(EXIT_FAILURE, "%s: invalid size (%d)", fname, size);
 	xpdisk_size = sb.st_size;
 }
 
