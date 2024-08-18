@@ -25,5 +25,6 @@ struct xpfe_if_t {			/* T:tty, R:RTC, D:disk */
 	volatile uint32_t xpd_lba;	/* D: disk LBA */
 	volatile uint32_t xpd_dir_addr;	/* D: transfer direction and XP addr */
 	volatile uint32_t xpd_flag;	/* D: flag */
+	volatile uint32_t xpd_blknum;	/* D: disk size (in blk) */
 } __packed;
 #endif
