@@ -28,6 +28,7 @@
 
 /* global variables */
 int a_flag = 0;
+int v_flag = 0;		/* verbose */
 int has_disk = 0;
 int xpfd;
 volatile uint8_t *xpshm;
@@ -65,10 +66,13 @@ main(int argc, char *argv[])
 
 	setprogname(argv[0]);
 
-	while ((ch = getopt(argc, argv, "a")) != -1) {
+	while ((ch = getopt(argc, argv, "av")) != -1) {
 		switch (ch) {
 		case 'a':
 			a_flag = 1;
+			break;
+		case 'v':
+			v_flag = 1;
 			break;
 		default:
 			usage();
@@ -144,5 +148,6 @@ usage(void)
 	printf("Usage: %s [options] xp_prog_file [disk_image]\n",
 	    getprogname());
 	printf("\t-a		: attach to running XP\n");
+	printf("\t-v		: verbose mode\n");
 	exit(EXIT_FAILURE);
 }
