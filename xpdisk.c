@@ -34,8 +34,6 @@
 #define	XPFE_DISKMAX_BLK (256 * 256 * 256) /* 8GB at this moment */
 
 /* extern */
-extern struct xpfe_if_t *xpfe_if;
-extern void *xpshm;
 extern int v_flag;
 
 /* static */

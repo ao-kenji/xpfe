@@ -31,7 +31,8 @@ int a_flag = 0;
 int v_flag = 0;		/* verbose */
 int has_disk = 0;
 int xpfd;
-volatile uint8_t *xpshm;
+struct xpfe_if_t *xpfe_if;
+volatile void *xpshm;
 
 /* prototypes */
 void usage(void);

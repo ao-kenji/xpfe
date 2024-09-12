@@ -22,9 +22,6 @@
 
 #include "xpfe.h"
 
-/* extern */
-extern struct xpfe_if_t *xpfe_if;
-
 void
 xprtc_sync(void)
 {

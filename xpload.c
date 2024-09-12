@@ -86,12 +86,12 @@ xp_load_reset(int xpfd, const char *fname)
 void *
 xp_mmap(int xpfd)
 {
-	uint8_t *xpshm;
+	uint8_t *shm;
 
-	xpshm = mmap(NULL, XP_MAX_SIZE, PROT_WRITE|PROT_READ, MAP_SHARED,
+	shm = mmap(NULL, XP_MAX_SIZE, PROT_WRITE|PROT_READ, MAP_SHARED,
 	    xpfd, 0);
-	if (xpshm == MAP_FAILED)
+	if (shm == MAP_FAILED)
 		err(EXIT_FAILURE, "mmap failed");
 
-	return xpshm;
+	return shm;
 }

@@ -27,4 +27,8 @@ struct xpfe_if_t {			/* T:tty, R:RTC, D:disk */
 	volatile uint32_t xpd_flag;	/* D: flag */
 	volatile uint32_t xpd_blknum;	/* D: disk size (in blk) */
 } __packed;
+
+extern struct xpfe_if_t *xpfe_if;
+extern void *xpshm;
+
 #endif

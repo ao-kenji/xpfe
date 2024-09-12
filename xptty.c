@@ -24,12 +24,8 @@
 #include "config.h"
 #include "xpfe.h"
 
-/* external */
-extern void *xpshm;		/* in xpfe.c */
-
 /* internal use */
 static struct termios termios_saved;
-struct xpfe_if_t *xpfe_if;
 
 void
 xptty_init(void)
