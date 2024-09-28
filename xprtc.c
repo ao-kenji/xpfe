@@ -30,11 +30,11 @@ xprtc_sync(void)
 	struct tm *now;
 
 	time(&t);
-	now = localtime(&t);
+	now = gmtime(&t);
 
 	*xprtc++ = (uint8_t)((now->tm_year + 1900) % 256);
 	*xprtc++ = (uint8_t)((now->tm_year + 1900) / 256);
-	*xprtc++ = (uint8_t) (now->tm_mon + 1);
+	*xprtc++ = (uint8_t) (now->tm_mon);
 	*xprtc++ = (uint8_t) (now->tm_mday);
 	*xprtc++ = (uint8_t) (now->tm_hour);
 	*xprtc++ = (uint8_t) (now->tm_min);
