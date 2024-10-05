@@ -137,7 +137,8 @@ main(int argc, char *argv[])
 	}
 
 	xptty_reset_mode();
-	xpdisk_close();
+	if (has_disk)
+		xpdisk_close();
 	close(xpfd);
 
 	return EXIT_SUCCESS;
