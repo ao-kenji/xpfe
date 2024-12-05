@@ -8,17 +8,18 @@
 
 ## DESCRIPTION
 The **xpfe** utility is a support program for HD647180X I/O Processor, so-called XP, on OMRON LUNA series workstations.
-It provides following functions to XP via the shared memory which LUNA's main CPU can access.
+It is intended to run Z80 binaries such as FUZIX and CP/M on XP and communicates with XP via shared memory that is accessible by LUNA's main CPU.
+
+The **xpfe** provides following functions:
 - input from tty on LUNA
 - output to tty on LUNA
-- read from/write to the _diskimage_ file on LUNA per 512 bytes block
+- read from/write to _diskimage_ on LUNA, per 512 bytes block
 - real-time clock (date and time)
 
-The **xpfe** loads _binfile_, maps it on XP's memory begins at 0x0000, and resets XP.
-
+The **xpfe** loads _binfile_ image, maps it on XP's memory begins at 0x0000, then resets XP to start that image.
 
 ## ENVIRONMENT
-The **xpfe** runs on OpenBSD/luna88k and NetBSD/luna68k.
+The **xpfe** runs on OpenBSD/luna88k and NetBSD/luna68k, on the real hardware and "nono" emulator.
 
 ## BUILD
 Just extract and make.
@@ -29,8 +30,11 @@ Just extract and make.
 ```
 The executable binary is "xpfe".
 
-## DISCLAIMER
-ABSOLUTELY NO WARRANTY
+## REFERENCES
+- OpenBSD/luna88k https://www.openbsd.org/luna88k.html
+- NetBSD/luna68k https://wiki.netbsd.org/ports/luna68k/
+- nono - LUNA emulator http://www.pastel-flower.jp/~isaki/nono/
+- FUZIX for LUNA XP (work-in-progress) https://github.com/ao-kenji/FUZIX/
 
 ## AUTHOR
 Kenji Aoyama
