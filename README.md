@@ -8,18 +8,20 @@
 
 ## DESCRIPTION
 The **xpfe** utility is a support program for HD647180X I/O Processor, so-called XP, on OMRON LUNA series workstations.
-It is intended to run Z80 binaries such as FUZIX and CP/M on XP and communicates with XP via shared memory that is accessible by LUNA's main CPU.
+It is intended to run Z80 binaries, such as FUZIX and CP/M, on XP.
+It communicates with XP via shared memory that is accessible by LUNA's main CPU.
 
-The **xpfe** provides following functions:
+**xpfe** provides following functions:
 - input from tty on LUNA
 - output to tty on LUNA
 - read from/write to _diskimage_ on LUNA, per 512 bytes block
 - real-time clock (date and time)
 
-The **xpfe** loads _binfile_ image, maps it on XP's memory begins at 0x0000, then resets XP to start that image.
+**xpfe** loads _binfile_ image, maps it on XP's memory begins at 0x0000, then resets XP to start that image.
+To quit **xpfe**, type 'Control-\'. (This may be changed in the future.)
 
 ## ENVIRONMENT
-The **xpfe** runs on OpenBSD/luna88k and NetBSD/luna68k, on the real hardware and "nono" emulator.
+**xpfe** runs on OpenBSD/luna88k and NetBSD/luna68k, on the real hardware and "nono" emulator.
 
 ## BUILD
 Just extract and make.
