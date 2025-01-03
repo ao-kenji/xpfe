@@ -25,6 +25,7 @@
 #include <unistd.h>
 
 #include "config.h"
+#include "xpfe.h"
 
 /* global variables */
 int a_flag = 0;
@@ -32,7 +33,7 @@ int v_flag = 0;		/* verbose */
 int has_disk = 0;
 int xpfd;
 struct xpfe_if_t *xpfe_if;
-volatile void *xpshm;
+void *xpshm;
 
 /* prototypes */
 void usage(void);
@@ -56,6 +57,15 @@ void xptty_set_rawmode(void);
 void xptty_reset_mode(void);
 void xptty_send(char);
 void xptty_receive(void);
+
+int
+is_xp_halted(void)
+{
+	volatile uint32_t *rxbuf = &(xpfe_if->t_rxbuf);
+
+	/* Check alive flag: 0 is alive, 1 is halted */
+	return *rxbuf & 0x000000ff ? 1 : 0;
+}
 
 int
 main(int argc, char *argv[])
@@ -112,6 +122,12 @@ main(int argc, char *argv[])
 	running = 1;
 
 	while (running) {
+		/* Check if XP is halted */
+		if (is_xp_halted()) {
+			running = 0;
+			continue;
+		}
+
 		/* Sync RTC */
 		xprtc_sync();
 
