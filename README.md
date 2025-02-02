@@ -20,7 +20,7 @@ It communicates with XP via shared memory that is accessible by LUNA's main CPU.
 **xpfe** loads _binfile_ image, maps it on XP's memory begins at 0x0000, then resets XP to start that image.
 To quit **xpfe**, type 'Control-\\'. (This may be changed in the future.)
 
-## ENVIRONMENT
+## RUNNING ENVIRONMENT
 **xpfe** runs on OpenBSD/luna88k and NetBSD/luna68k, on the real hardware and "nono" emulator.
 
 ## BUILD
