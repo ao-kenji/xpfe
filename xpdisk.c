@@ -148,5 +148,5 @@ xpdisk_register(void)
 	flag = *xpd_flag;
 	*xpd_flag = flag | 0x00000001;
 
-	*xpd_blknum = (uint32_t)(xpdisk_size / XPFE_BLKSIZE);
+	*xpd_blknum = (uint32_t)(htole32(xpdisk_size / XPFE_BLKSIZE));
 }
