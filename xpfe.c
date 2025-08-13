@@ -30,13 +30,23 @@
 /* global variables */
 int a_flag = 0;
 int v_flag = 0;		/* verbose */
-int has_disk = 0;
+int use_disk = 0;
+int use_rtc = 0;
 int xpfd;
+struct xpfe_config_t xpfe_config = {
+	.fname = NULL,
+	.addr = XPFE_OFFSET,
+	.disk = 1,
+	.rtc  = 1,
+};
 struct xpfe_if_t *xpfe_if;
 void *xpshm;
 
 /* prototypes */
 void usage(void);
+
+/* config.c */
+int read_config(const char*);
 
 /* xpdisk.c */
 void xpdisk_open(const char*);
@@ -74,13 +84,17 @@ main(int argc, char *argv[])
 	int ch, ret, running;
 	u_int code;
 	extern int optind, opterr;
+	extern char *optarg;
 
 	setprogname(argv[0]);
 
-	while ((ch = getopt(argc, argv, "av")) != -1) {
+	while ((ch = getopt(argc, argv, "ac:v")) != -1) {
 		switch (ch) {
 		case 'a':
 			a_flag = 1;
+			break;
+		case 'c':
+			xpfe_config.fname = optarg;
 			break;
 		case 'v':
 			v_flag = 1;
@@ -93,6 +107,8 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
+	read_config(xpfe_config.fname);
+
 	if ((argc == 0) || (argc > 2))
 		usage();
 
@@ -101,10 +117,13 @@ main(int argc, char *argv[])
 	if (xpfd < 0 )
 		err(EXIT_FAILURE, "can not open %s", XP_DEV);
 
-	if (argc == 2) {
+	if (xpfe_config.disk && argc == 2) {
 		xpdisk_open(argv[1]);
-		has_disk = 1;
+		use_disk = 1;
 	}
+
+	if (xpfe_config.rtc)
+		use_rtc = 1;
 
 	xpshm  = xp_mmap(xpfd);
 
@@ -117,7 +136,8 @@ main(int argc, char *argv[])
 	printf("type '^\\' to detach.\n");
 
 	xptty_init();
-	xpdisk_register();
+	if (use_disk)
+		xpdisk_register();
 	xptty_set_rawmode();
 	running = 1;
 
@@ -129,13 +149,14 @@ main(int argc, char *argv[])
 		}
 
 		/* Sync RTC */
-		xprtc_sync();
+		if (use_rtc)
+			xprtc_sync();
 
 		/* Receive & put to stdout, first */
 		xptty_receive();
 
 		/* Disk I/O */
-		if (has_disk)
+		if (use_disk)
 			xpdisk_io();
 
 		/* Check Key in */
@@ -153,7 +174,7 @@ main(int argc, char *argv[])
 	}
 
 	xptty_reset_mode();
-	if (has_disk)
+	if (use_disk)
 		xpdisk_close();
 	close(xpfd);
 
@@ -165,7 +186,9 @@ usage(void)
 {
 	printf("Usage: %s [options] xp_prog_file [disk_image]\n",
 	    getprogname());
-	printf("\t-a		: attach to running XP\n");
-	printf("\t-v		: verbose mode\n");
+	printf("Options:\n");
+	printf("\t-a			: attach to running XP\n");
+	printf("\t-c config_file	: specify the config file\n");
+	printf("\t-v			: verbose mode\n");
 	exit(EXIT_FAILURE);
 }

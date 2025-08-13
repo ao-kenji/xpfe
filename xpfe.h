@@ -28,6 +28,13 @@ struct xpfe_if_t {			/* T:tty, R:RTC, D:disk */
 	volatile uint32_t xpd_blknum;	/* D: disk size (in blk, LE) */
 };
 
+struct xpfe_config_t {
+	char *fname;			/* config file name */
+	uint32_t addr;			/* xpfe I/F address (XP's view) */
+	int disk;			/* disk service (0:off, 1:on) */
+	int rtc;			/* RTC service (0:off, 1:on) */
+};
+
 extern struct xpfe_if_t *xpfe_if;
 extern void *xpshm;
 
