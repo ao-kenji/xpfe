@@ -34,7 +34,10 @@ char default_config_fname[] = "xpfe.conf";
 extern struct xpfe_config_t xpfe_config;
 extern int v_flag;
 
-/* trim the string */
+/*
+ * Trim the string
+ * Note: the argument string is not constant; it will be modified.
+ */
 char *
 trim(char *s)
 {
@@ -109,8 +112,8 @@ read_config(const char *fname)
 		strlcpy(value, p + 1, MAX_VALUE_LEN);
 
 		/* trim key and value */
-		char* trimmed_key = trim(key);
-		char* trimmed_value = trim(value);
+		trim(key);
+		trim(value);
 
 		/* set key and value */
 		if (strcmp(key, "if-addr") == 0) {
