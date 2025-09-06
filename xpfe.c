@@ -107,7 +107,8 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	read_config(xpfe_config.fname);
+	if (xpfe_config.fname != NULL)
+		read_config(xpfe_config.fname);
 
 	if ((argc == 0) || (argc > 2))
 		usage();

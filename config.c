@@ -28,8 +28,6 @@
 #define MAX_KEY_LEN 64
 #define MAX_VALUE_LEN 128
 
-char default_config_fname[] = "xpfe.conf";
-
 /* extern */
 extern struct xpfe_config_t xpfe_config;
 extern int v_flag;
@@ -79,9 +77,6 @@ read_config(const char *fname)
 	char value[MAX_VALUE_LEN];
 	char *p;
 	int val;
-
-	if (fname == NULL)
-		fname = default_config_fname;
 
 	fp = fopen(fname, "r");
 	if (fp == NULL) {
