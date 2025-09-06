@@ -17,7 +17,6 @@
 #include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>	/* strncmp() */
 #include <termios.h>
 #include <unistd.h>
 
@@ -29,22 +28,6 @@ extern struct xpfe_config_t xpfe_config;
 
 /* internal use */
 static struct termios termios_saved;
-
-void
-xptty_init(void)
-{
-	if (xpshm == NULL)
-		err(EXIT_FAILURE, "xpshm not initialized");
-
-	xpfe_if = xpshm + (uint16_t)(xpfe_config.addr & 0x0000ffff);
-
-	if (strncmp(xpfe_if->magic, "XPFE", 4) != 0)
-		errx(EXIT_FAILURE, "invalid I/F offset 0x%04x,"
-		    " magic %02x %02x %02x %02x",
-		    xpfe_config.addr,
-		    (xpfe_if->magic)[0], (xpfe_if->magic)[1],
-		    (xpfe_if->magic)[2], (xpfe_if->magic)[3]);
-}
 
 void
 xptty_set_rawmode(void)
