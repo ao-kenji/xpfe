@@ -23,9 +23,6 @@
 #include "config.h"
 #include "xpfe.h"
 
-/* config.c */
-extern struct xpfe_config_t xpfe_config;
-
 /* internal use */
 static struct termios termios_saved;
 
